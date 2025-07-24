@@ -18,19 +18,21 @@ export const menuService = {
       .sortBy('createdAt');
   },
 
-  async add(config: Omit<MenuConfig, 'id' | 'createdAt' | 'updatedAt'>): Promise<number> {
+  async add(
+    config: Omit<MenuConfig, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<number> {
     const now = new Date();
     return db.menuConfigs.add({
       ...config,
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     });
   },
 
   async update(id: string, config: Partial<MenuConfig>): Promise<void> {
     await db.menuConfigs.update(Number(id), {
       ...config,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   },
 
@@ -49,9 +51,11 @@ export const menuService = {
   },
 
   async importConfigs(configs: MenuConfig[]): Promise<void> {
-    await db.menuConfigs.bulkAdd(configs.map(config => ({
-      ...config,
-      id: undefined
-    })));
-  }
+    await db.menuConfigs.bulkAdd(
+      configs.map(config => ({
+        ...config,
+        id: undefined,
+      }))
+    );
+  },
 };

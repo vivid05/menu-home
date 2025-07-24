@@ -7,7 +7,7 @@ export class MenuDatabase extends Dexie {
   constructor() {
     super('MenuDatabase');
     this.version(1).stores({
-      menuConfigs: '++id, version, name, createdAt, updatedAt'
+      menuConfigs: '++id, version, name, createdAt, updatedAt',
     });
   }
 }

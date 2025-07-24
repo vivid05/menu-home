@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, message, Modal, Typography, Card, Select } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, CopyOutlined } from '@ant-design/icons';
+import {
+  Table,
+  Button,
+  Space,
+  message,
+  Modal,
+  Typography,
+  Card,
+  Select,
+} from 'antd';
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { MenuConfig } from '../types';
 import { menuService } from '../services';
@@ -12,7 +26,7 @@ const { Option } = Select;
 const generateVersionOptions = () => {
   const options = [{ value: '', label: '全部版本' }];
   const currentYear = 2025;
-  
+
   for (let month = 1; month <= 12; month++) {
     for (let period = 1; period <= 2; period++) {
       const value = `${currentYear}-${month}月${period}期`;
@@ -20,7 +34,7 @@ const generateVersionOptions = () => {
       options.push({ value, label });
     }
   }
-  
+
   return options;
 };
 
@@ -52,7 +66,7 @@ export const MenuList: React.FC = () => {
       setFilteredConfigs(menuConfigs);
       return;
     }
-    
+
     try {
       const searchResults = await menuService.searchByVersion(value);
       setFilteredConfigs(searchResults);
@@ -157,8 +171,17 @@ export const MenuList: React.FC = () => {
 
   return (
     <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
-      <Card style={{ marginBottom: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+      <Card
+        style={{ marginBottom: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '24px',
+          }}
+        >
           <Title level={2} style={{ margin: 0, color: '#1890ff' }}>
             📋 菜单配置管理系统
           </Title>
@@ -167,11 +190,11 @@ export const MenuList: React.FC = () => {
             size="large"
             icon={<PlusOutlined />}
             onClick={() => navigate('/add')}
-            style={{ 
+            style={{
               borderRadius: '8px',
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               border: 'none',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
+              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
             }}
           >
             新增菜单
@@ -206,8 +229,8 @@ export const MenuList: React.FC = () => {
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`,
-            style: { marginTop: '16px' }
+            showTotal: total => `共 ${total} 条记录`,
+            style: { marginTop: '16px' },
           }}
           style={{ borderRadius: '8px' }}
         />

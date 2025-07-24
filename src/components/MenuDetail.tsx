@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, message, Typography, Descriptions, Space } from 'antd';
-import { ArrowLeftOutlined, EditOutlined, CopyOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  EditOutlined,
+  CopyOutlined,
+} from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '@monaco-editor/react';
 import { MenuConfig } from '../types';
@@ -40,7 +44,7 @@ export const MenuDetail: React.FC = () => {
 
   const handleCopyJson = async () => {
     if (!menuConfig) return;
-    
+
     try {
       await navigator.clipboard.writeText(menuConfig.jsonConfig);
       message.success('JSON配置已复制到剪贴板');
@@ -57,15 +61,15 @@ export const MenuDetail: React.FC = () => {
 
   const handleCopyAll = async () => {
     if (!menuConfig) return;
-    
+
     const copyData = {
       version: menuConfig.version,
       path: menuConfig.path,
       jsonConfig: JSON.parse(menuConfig.jsonConfig),
       createdAt: menuConfig.createdAt,
-      updatedAt: menuConfig.updatedAt
+      updatedAt: menuConfig.updatedAt,
     };
-    
+
     try {
       await navigator.clipboard.writeText(JSON.stringify(copyData, null, 2));
       message.success('完整配置已复制到剪贴板');
@@ -81,16 +85,27 @@ export const MenuDetail: React.FC = () => {
   };
 
   if (loading) {
-    return <div style={{ padding: '24px', textAlign: 'center' }}>加载中...</div>;
+    return (
+      <div style={{ padding: '24px', textAlign: 'center' }}>加载中...</div>
+    );
   }
 
   if (!menuConfig) {
-    return <div style={{ padding: '24px', textAlign: 'center' }}>菜单配置不存在</div>;
+    return (
+      <div style={{ padding: '24px', textAlign: 'center' }}>菜单配置不存在</div>
+    );
   }
 
   return (
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          marginBottom: '24px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Button
             icon={<ArrowLeftOutlined />}
@@ -104,10 +119,7 @@ export const MenuDetail: React.FC = () => {
           </Title>
         </div>
         <Space>
-          <Button
-            icon={<CopyOutlined />}
-            onClick={handleCopyAll}
-          >
+          <Button icon={<CopyOutlined />} onClick={handleCopyAll}>
             复制全部
           </Button>
           <Button
@@ -128,9 +140,7 @@ export const MenuDetail: React.FC = () => {
           <Descriptions.Item label="迭代版本号">
             {menuConfig.version}
           </Descriptions.Item>
-          <Descriptions.Item label="配置ID">
-            {menuConfig.id}
-          </Descriptions.Item>
+          <Descriptions.Item label="配置ID">{menuConfig.id}</Descriptions.Item>
           <Descriptions.Item label="创建时间">
             {new Date(menuConfig.createdAt).toLocaleString()}
           </Descriptions.Item>
@@ -142,7 +152,13 @@ export const MenuDetail: React.FC = () => {
 
       <Card
         title={
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <span>JSON配置</span>
             <Button
               size="small"
