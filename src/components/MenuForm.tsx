@@ -87,7 +87,11 @@ export const MenuForm: React.FC = () => {
       return;
     }
 
-    if (!validateJson(jsonValue)) {
+    let processedJsonValue = jsonValue;
+    // 自动将内容中的"hwsj"替换成"touch"
+    processedJsonValue = jsonValue.replace(/hwsj/g, "touch");
+
+    if (!validateJson(processedJsonValue)) {
       message.error("JSON格式不正确，请检查后重试");
       return;
     }
@@ -97,13 +101,13 @@ export const MenuForm: React.FC = () => {
       if (isEdit && id) {
         await menuService.update(id, {
           ...values,
-          jsonConfig: jsonValue,
+          jsonConfig: processedJsonValue,
         });
         message.success("更新成功");
       } else {
         await menuService.add({
           ...values,
-          jsonConfig: jsonValue,
+          jsonConfig: processedJsonValue,
         });
         message.success("保存成功");
       }
