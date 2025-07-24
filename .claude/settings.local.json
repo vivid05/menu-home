@@ -13,7 +13,10 @@
       "Bash(git commit:*)",
       "Bash(git remote add:*)",
       "Bash(git push:*)",
-      "Bash(git remote set-url origin https://github.com/vivid05/menu-home.git)"
+      "Bash(git remote set-url origin https://github.com/vivid05/menu-home.git)",
+      "Bash(ls -la)",
+      "Bash(ls:*)",
+      "Bash(cp -r dist/* .)"
     ],
     "deny": []
   }
