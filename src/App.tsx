@@ -8,9 +8,11 @@ import { MenuDetail } from './components/MenuDetail';
 import './App.css';
 
 const App: React.FC = () => {
+  const basename = process.env.NODE_ENV === 'production' ? '/menu-home' : '';
+
   return (
     <ConfigProvider locale={zhCN}>
-      <Router>
+      <Router basename={basename}>
         <div className="app">
           <Routes>
             <Route path="/" element={<MenuList />} />
