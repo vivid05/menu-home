@@ -42,10 +42,26 @@ export const MenuList: React.FC = () => {
   const [menuConfigs, setMenuConfigs] = useState<MenuConfig[]>([]);
   const [filteredConfigs, setFilteredConfigs] = useState<MenuConfig[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState<string>('');
   const navigate = useNavigate();
+
+  // 获取当前月份的1期版本
+  const getCurrentMonthFirstPeriod = () => {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth() + 1; // getMonth() 返回 0-11，所以需要 +1
+    return `${currentYear}-${currentMonth}月1期`;
+  };
 
   useEffect(() => {
     loadMenuConfigs();
+  }, []);
+
+  useEffect(() => {
+    // 设置默认选中当前月的1期
+    const defaultVersion = getCurrentMonthFirstPeriod();
+    setSelectedVersion(defaultVersion);
+    handleFilter(defaultVersion);
   }, []);
 
   const loadMenuConfigs = async () => {
@@ -62,6 +78,7 @@ export const MenuList: React.FC = () => {
   };
 
   const handleFilter = async (value: string) => {
+    setSelectedVersion(value);
     if (!value) {
       setFilteredConfigs(menuConfigs);
       return;
@@ -87,6 +104,59 @@ export const MenuList: React.FC = () => {
       document.execCommand('copy');
       document.body.removeChild(textArea);
       message.success('JSON配置已复制到剪贴板');
+    }
+  };
+
+  const handleBatchCopyPaths = async () => {
+    if (!selectedVersion) {
+      message.warning('请先选择一个迭代版本');
+      return;
+    }
+
+    try {
+      // 获取当前筛选版本的所有配置
+      const configs = filteredConfigs.length > 0 ? filteredConfigs : await menuService.searchByVersion(selectedVersion);
+      
+      // 存储所有路径
+      const paths: string[] = [];
+      
+      // 遍历每个配置
+      for (const config of configs) {
+        try {
+          // 解析JSON配置
+          const json = JSON.parse(config.jsonConfig);
+          
+          // 递归提取所有name字段
+          const extractNames = (obj: any, basePath: string = config.path) => {
+            if (Array.isArray(obj)) {
+              obj.forEach(item => extractNames(item, basePath));
+            } else if (typeof obj === 'object' && obj !== null) {
+              if (obj.name) {
+                paths.push(`${basePath}//${obj.name}`);
+              }
+              
+              // 遍历对象的所有属性
+              Object.keys(obj).forEach(key => {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                  extractNames(obj[key], basePath);
+                }
+              });
+            }
+          };
+          
+          extractNames(json);
+        } catch (parseError) {
+          console.error(`解析配置ID ${config.id} 的JSON时出错:`, parseError);
+        }
+      }
+      
+      // 复制到剪贴板
+      const result = paths.join('\n');
+      await navigator.clipboard.writeText(result);
+      message.success(`已复制 ${paths.length} 条路径到剪贴板`);
+    } catch (error) {
+      console.error('批量复制路径失败:', error);
+      message.error('批量复制路径失败');
     }
   };
 
@@ -201,11 +271,12 @@ export const MenuList: React.FC = () => {
           </Button>
         </div>
 
-        <div style={{ marginBottom: '20px' }}>
+        <div style={{ marginBottom: '20px', display: 'flex', gap: '16px' }}>
           <Select
             placeholder="🔍 请选择迭代版本号筛选"
             allowClear
             size="large"
+            value={selectedVersion}
             onChange={handleFilter}
             style={{ width: 400 }}
           >
@@ -215,6 +286,18 @@ export const MenuList: React.FC = () => {
               </Option>
             ))}
           </Select>
+          <Button
+            type="primary"
+            size="large"
+            icon={<CopyOutlined />}
+            onClick={handleBatchCopyPaths}
+            disabled={!selectedVersion}
+            style={{
+              borderRadius: '8px',
+            }}
+          >
+            批量复制路径
+          </Button>
         </div>
       </Card>
 
