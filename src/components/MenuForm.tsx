@@ -28,6 +28,7 @@ export const MenuForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [jsonValue, setJsonValue] = useState("");
   const [jsonError, setJsonError] = useState("");
+  const [initialVersion, setInitialVersion] = useState("");
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
@@ -35,8 +36,27 @@ export const MenuForm: React.FC = () => {
   useEffect(() => {
     if (isEdit && id) {
       loadMenuConfig(id);
+    } else {
+      // 新增配置时，获取最近一次保存的配置版本号
+      loadLatestVersion();
     }
   }, [id, isEdit]);
+
+  const loadLatestVersion = async () => {
+    try {
+      const configs = await menuService.getAll();
+      if (configs.length > 0) {
+        // 获取最新的配置（按创建时间排序后的第一个）
+        const latestConfig = configs[0];
+        setInitialVersion(latestConfig.version);
+        form.setFieldsValue({
+          version: latestConfig.version,
+        });
+      }
+    } catch (error) {
+      console.error("获取最新配置失败:", error);
+    }
+  };
 
   const loadMenuConfig = async (configId: string) => {
     setLoading(true);
@@ -139,22 +159,44 @@ export const MenuForm: React.FC = () => {
             marginBottom: "24px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Button
+              icon={<ArrowLeftOutlined />}
+              onClick={() => navigate("/")}
+              style={{
+                marginRight: "16px",
+                borderRadius: "8px",
+                border: "1px solid #d9d9d9",
+              }}
+            >
+              返回列表
+            </Button>
+            <Title level={2} style={{ margin: 0, color: "#1890ff" }}>
+              {isEdit ? "✏️ 编辑菜单配置" : "➕ 新增菜单配置"}
+            </Title>
+          </div>
           <Button
-            icon={<ArrowLeftOutlined />}
-            onClick={() => navigate("/")}
+            type="primary"
+            onClick={form.submit}
+            loading={loading}
+            icon={<SaveOutlined />}
+            size="large"
+            disabled={!!jsonError || !jsonValue.trim()}
             style={{
-              marginRight: "16px",
               borderRadius: "8px",
-              border: "1px solid #d9d9d9",
+              background:
+                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              border: "none",
+              boxShadow: "0 4px 12px rgba(102, 126, 234, 0.4)",
+              height: "48px",
+              fontSize: "16px",
             }}
           >
-            返回列表
+            {isEdit ? "更新配置" : "保存配置"}
           </Button>
-          <Title level={2} style={{ margin: 0, color: "#1890ff" }}>
-            {isEdit ? "✏️ 编辑菜单配置" : "➕ 新增菜单配置"}
-          </Title>
         </div>
 
         <Card
@@ -167,7 +209,7 @@ export const MenuForm: React.FC = () => {
             form={form}
             layout="vertical"
             onFinish={handleSubmit}
-            initialValues={{ version: "", path: "" }}
+            initialValues={{ version: initialVersion, path: "" }}
           >
             <Form.Item
               label="迭代版本号"
@@ -274,27 +316,7 @@ export const MenuForm: React.FC = () => {
               )}
             </Form.Item>
 
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading}
-                icon={<SaveOutlined />}
-                size="large"
-                disabled={!!jsonError || !jsonValue.trim()}
-                style={{
-                  borderRadius: "8px",
-                  background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  border: "none",
-                  boxShadow: "0 4px 12px rgba(102, 126, 234, 0.4)",
-                  height: "48px",
-                  fontSize: "16px",
-                }}
-              >
-                {isEdit ? "更新配置" : "保存配置"}
-              </Button>
-            </Form.Item>
+            {/* 移除了原来的保存按钮 */}
           </Form>
         </Card>
       </div>
