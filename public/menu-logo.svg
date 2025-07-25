@@ -1,0 +1,22 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 主背景圆形 -->
+  <circle cx="16" cy="16" r="15" fill="#1890ff" stroke="#0050b3" stroke-width="1"/>
+  
+  <!-- 菜单列表线条 -->
+  <rect x="8" y="9" width="16" height="2" rx="1" fill="white"/>
+  <rect x="8" y="13" width="12" height="2" rx="1" fill="white"/>
+  <rect x="8" y="17" width="14" height="2" rx="1" fill="white"/>
+  <rect x="8" y="21" width="10" height="2" rx="1" fill="white"/>
+  
+  <!-- 配置齿轮图标 -->
+  <g transform="translate(20, 6)">
+    <circle cx="4" cy="4" r="2" fill="none" stroke="white" stroke-width="1.2"/>
+    <path d="M4 0v1.5M4 6.5V8M0 4h1.5M6.5 4H8M1.17 1.17l1.06 1.06M5.77 5.77l1.06 1.06M1.17 6.83l1.06-1.06M5.77 2.23l1.06-1.06" 
+          stroke="white" stroke-width="0.8" stroke-linecap="round"/>
+  </g>
+  
+  <!-- 小装饰点 -->
+  <circle cx="6" cy="12" r="1" fill="#52c41a"/>
+  <circle cx="6" cy="16" r="1" fill="#faad14"/>
+  <circle cx="6" cy="20" r="1" fill="#f5222d"/>
+</svg>
