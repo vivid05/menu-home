@@ -126,16 +126,21 @@ export const MenuList: React.FC = () => {
           // 解析JSON配置
           const json = JSON.parse(config.jsonConfig);
           
-          // 递归提取所有name字段
+          // 只遍历resourceMultilingualList数组，且resourcetype为1时才遍历
           const extractNames = (obj: any, basePath: string = config.path) => {
-            if (Array.isArray(obj)) {
-              obj.forEach(item => extractNames(item, basePath));
-            } else if (typeof obj === 'object' && obj !== null) {
-              if (obj.name) {
-                paths.push(`${basePath}//${obj.name}`);
+            if (typeof obj === 'object' && obj !== null) {
+              // 检查是否有resourceMultilingualList数组和resourcetype字段
+              if (obj.resourceMultilingualList && Array.isArray(obj.resourceMultilingualList) && obj.resourcetype === 1) {
+                obj.resourceMultilingualList.forEach((item: any) => {
+                  if (item && typeof item === 'object' && item.name) {
+                    paths.push(`${basePath}//${item.name}`);
+                  }
+                  // 递归处理resourceMultilingualList中的每个项目
+                  extractNames(item, basePath);
+                });
               }
               
-              // 遍历对象的所有属性
+              // 继续遍历对象的其他属性以查找更多的resourceMultilingualList
               Object.keys(obj).forEach(key => {
                 if (typeof obj[key] === 'object' && obj[key] !== null) {
                   extractNames(obj[key], basePath);

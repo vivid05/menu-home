@@ -273,7 +273,7 @@ export const MenuForm: React.FC = () => {
                 }}
               >
                 <Editor
-                  height="400px"
+                  height="600px"
                   defaultLanguage="json"
                   value={jsonValue}
                   onChange={handleJsonChange}
