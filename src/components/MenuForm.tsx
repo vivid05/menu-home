@@ -187,11 +187,14 @@ export const MenuForm: React.FC = () => {
             disabled={!!jsonError || !jsonValue.trim()}
             style={{
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: !!jsonError || !jsonValue.trim() 
+                ? '#d9d9d9' 
+                : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               border: 'none',
               boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
               height: '48px',
               fontSize: '16px',
+              color: !!jsonError || !jsonValue.trim() ? '#666666' : '#ffffff',
             }}
           >
             {isEdit ? '更新配置' : '保存配置'}
