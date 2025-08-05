@@ -54,14 +54,14 @@ export const MenuList: React.FC = () => {
   };
 
   useEffect(() => {
-    loadMenuConfigs();
-  }, []);
-
-  useEffect(() => {
-    // 设置默认选中当前月的1期
-    const defaultVersion = getCurrentMonthFirstPeriod();
-    setSelectedVersion(defaultVersion);
-    handleFilter(defaultVersion);
+    const initializeData = async () => {
+      await loadMenuConfigs();
+      // 数据加载完成后设置默认选中当前月的1期
+      const defaultVersion = getCurrentMonthFirstPeriod();
+      setSelectedVersion(defaultVersion);
+      handleFilter(defaultVersion);
+    };
+    initializeData();
   }, []);
 
   const loadMenuConfigs = async () => {
@@ -77,10 +77,11 @@ export const MenuList: React.FC = () => {
     }
   };
 
-  const handleFilter = async (value: string) => {
+  const handleFilter = async (value: string, configs?: MenuConfig[]) => {
     setSelectedVersion(value);
     if (!value) {
-      setFilteredConfigs(menuConfigs);
+      const currentConfigs = configs || menuConfigs;
+      setFilteredConfigs(currentConfigs);
       return;
     }
 
@@ -282,7 +283,7 @@ export const MenuList: React.FC = () => {
             allowClear
             size="large"
             value={selectedVersion}
-            onChange={handleFilter}
+            onChange={(value) => handleFilter(value || '')}
             style={{ width: 400 }}
           >
             {generateVersionOptions().map(option => (
