@@ -10,7 +10,7 @@ const { Option } = Select;
 
 const generateVersionOptions = () => {
   const options = [];
-  const currentYear = 2025;
+  const currentYear = new Date().getFullYear();
 
   for (let month = 1; month <= 12; month++) {
     for (let period = 1; period <= 2; period++) {
