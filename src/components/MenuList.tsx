@@ -554,7 +554,6 @@ export const MenuList: React.FC = () => {
         
         .ant-table-tbody > tr:hover > td {
           background: linear-gradient(135deg, #e6f7ff 0%, #f0f9ff 100%) !important;
-          transform: scale(1.01);
           transition: all 0.3s ease;
           box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
         }
@@ -572,11 +571,53 @@ export const MenuList: React.FC = () => {
         
         .ant-pagination-item {
           border-radius: 8px;
+          font-weight: 600;
+          color: #333 !important;
+          border-color: #d9d9d9;
+        }
+        
+        .ant-pagination-item a {
+          color: #333 !important;
+          font-weight: 600;
+        }
+        
+        .ant-pagination-item:hover,
+        .ant-pagination-item:hover:not(.ant-pagination-item-active) {
+          border-color: #d9d9d9 !important;
+          background-color: #fafafa !important;
+        }
+        
+        .ant-pagination-item:hover a,
+        .ant-pagination-item:hover:not(.ant-pagination-item-active) a {
+          color: #333 !important;
+        }
+        
+        .ant-pagination .ant-pagination-item:hover a {
+          color: #333 !important;
+        }
+        
+        .ant-pagination .ant-pagination-item:not(.ant-pagination-item-active):hover a {
+          color: #333 !important;
         }
         
         .ant-pagination-item-active {
           background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
           border-color: #1890ff;
+        }
+        
+        .ant-pagination-item-active a {
+          color: white !important;
+          font-weight: bold;
+        }
+        
+        .ant-pagination-total-text {
+          color: #666 !important;
+          font-weight: 500;
+        }
+        
+        .ant-pagination-options-quick-jumper input {
+          color: #333 !important;
+          font-weight: 500;
         }
         
         /* 响应式样式 */
