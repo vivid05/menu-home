@@ -7,6 +7,7 @@ export default defineConfig({
   base: './',
   build: {
     outDir: 'docs',
+    assetsDir: 'static', // 指定生成静态资源的存放路径
     rollupOptions: {
       output: {
         manualChunks(id) {

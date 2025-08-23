@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { MenuList } from './components/MenuList';
@@ -8,11 +8,9 @@ import { MenuDetail } from './components/MenuDetail';
 import './App.css';
 
 const App: React.FC = () => {
-  const basename = process.env.NODE_ENV === 'production' ? '/menu-home' : '';
-
   return (
     <ConfigProvider locale={zhCN}>
-      <Router basename={basename}>
+      <Router>
         <div className="app">
           <Routes>
             <Route path="/" element={<MenuList />} />
